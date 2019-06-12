@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class JobData {
      * @param value Value of teh field to search for
      * @return List of all jobs matching the criteria
      */
+
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
 
         // load data, if not already loaded
@@ -74,14 +76,39 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
-            aValue = aValue.toLowerCase();
+            String aValue = row.get(column).toLowerCase();
             value = value.toLowerCase();
 
             if (aValue.contains(value)) {
                 jobs.add(row);
             }
         }
+
+        return jobs;
+    }
+    public static ArrayList<HashMap<String, String>> findByValue(String searchTerm) {
+
+        // load data, if not already loaded
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+           // System.out.println("My rows " + row + " - " + row.keySet());
+            for (String aValue : row.keySet()) {
+                String keyRow = row.get(aValue);
+               // System.out.println("aValues is " + aValue + " : " + keyRow);
+
+                searchTerm = searchTerm.toLowerCase();
+                keyRow = keyRow.toLowerCase();
+
+
+                if (keyRow.contains(searchTerm)) {
+                    jobs.add(row);
+                }
+            }
+        }
+
 
         return jobs;
     }
